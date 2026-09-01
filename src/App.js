@@ -1,42 +1,59 @@
-import React, {Component} from 'react';
-import Header from './components/Header';
-import Song from './components/Song';
+import React, {useState, useEffect} from 'react';
+import Header from './components/Header/Header';
+import SearchResults from './components/SearchResults/SearchResults';
+import Library from './components/Library/Library';
 import './App.css';
 
-class App extends Component {
+const App = () => {
 
-  componentDidMount() {
-    console.log("La aplicación se ha montado correctamente.");
+  const [resultadosBusqueda, setResultadosBusqueda] = useState([
+    {
+      id: 1,
+      titulo: "Neón Sobre Tlalpan",
+      artista: "Marea de Bolsillo",
+      album: "Kilometro Cero",
+      duracion: "3:19"
+    },
+    {
+      id: 2,
+      titulo: "La planta del departamento 6",
+      artista: "Abril Magnética",
+      album: "Objetos que sobreviven a una mudanza",
+      duracion: "3:45" 
+    },
+    {
+      id: 3,
+      titulo: "Café a las 2:17",
+      artista: "Los Edificios Vacíos",
+      album: "Manual para perder el último metro",
+      duracion: "3:51"
+    }
+  ]);
+
+  const [biblioteca, setBiblioteca] = useState([]);
+
+  useEffect(() => {
+    console.log("La biblioteca se ha actualizado.");
+  }, [biblioteca]);
+
+  const agregarCancion = (cancion) => {
+    setBiblioteca([...biblioteca, cancion]);
   }
 
-  render() {
-    return (
-      <div className="App">
-        <Header />
-        <main className="biblioteca">
-          <h2>Mi playlist</h2>
-          <Song
-            title="Neón Sobre Tlalpan"
-            artist="Marea de Bolsillo"
-            album="Kilometro Cero"
-            duration="3:19"
-          />
-          <Song
-            title="La planta del departamento 6"
-            artist="Abril Magnética"
-            album="Objetos que sobreviven a una mudanza"
-            duration="3:45"
-          />
-          <Song
-            title="Café a las 2:17"
-            artist="Los Edificios Vacíos"
-            album="Manual para perder el último metro"
-            duration="3:51"
-          />
-        </main>
-      </div>
-    );
-  }
+  return (
+    <div className="App">
+      <Header 
+      />
+      <main>
+        <SearchResults 
+          canciones={resultadosBusqueda} 
+          agregarCancion={agregarCancion} 
+        />
+        <Library 
+          canciones={biblioteca} 
+        />
+      </main>
+    </div>
+  );
 }
-
 export default App;
