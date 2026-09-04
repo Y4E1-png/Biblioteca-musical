@@ -1,14 +1,15 @@
 import React from "react";
-import './styles.css';
+import { SongContainer, SongTitle, SongText } from "./styles";
+
 
 const Song = (props) => {
     return (
-        <article className="cancion">
-            <h2>{props.titulo}</h2>
-            <p>Artista: {props.artista}</p>
-            <p>Álbum: {props.album}</p>
-            <p>Duración: {props.duracion}</p>
-        </article>
+        <SongContainer>
+            <SongTitle>{props.titulo}</SongTitle>
+            <SongText>Artista: {props.artista}</SongText>
+            <SongText>Álbum: {props.album}</SongText>
+            <SongText>Duración: {props.duracion}</SongText>
+        </SongContainer>
     );
 }
 

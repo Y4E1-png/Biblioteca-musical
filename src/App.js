@@ -6,7 +6,9 @@ import Library from './components/Library/Library';
 import useFetch from './hooks/useFetch'; 
 import SearchBar from './components/SearchBar/SearchBar';
 import SongDetail from './components/SongDetail/SongDetail';
-import './App.css';
+import StatusMessage from './components/StatusMessage/StatusMessage';
+import { AppContainer } from './App.styles';
+
 
 const App = () => {
 
@@ -42,34 +44,35 @@ const App = () => {
 
   const renderContent = () => {
       if (loading) {
-        return <p>Cargando álbumes...</p>;
+        return <StatusMessage>Cargando álbumes...</StatusMessage>;
       }
 
-      if (error) {
-        return (
-          <>
-            <p>Hubo un problema al cargar los álbumes.</p>
-            <button type="button" onClick={reintentar}>
-              Reintentar
-            </button>
-          </>
-        );
-      }
+        if (error) {
+          return (
+            <>
+              <StatusMessage error>Hubo un problema al cargar los álbumes.</StatusMessage>
+              <button type="button" onClick={reintentar}>
+                Reintentar
+              </button>
+            </>
+          );
+        }
 
-      if (!data.album || data.album.length === 0) {
-        return <p>No se encontraron álbumes.</p>;
-      }
-      return data.album.map((album) => (
-        <SearchResults
-          key={album.idAlbum}
-          idAlbum={album.idAlbum}
-          agregarCancion={agregarCancion}
-        />
-      ));
+          if (!data.album || data.album.length === 0) {
+            return <StatusMessage>No se encontraron álbumes.</StatusMessage>;
+          }
+          
+    return data.album.map((album) => (
+      <SearchResults
+        key={album.idAlbum}
+        idAlbum={album.idAlbum}
+        agregarCancion={agregarCancion}
+      />
+    ));
   };
 
   return (
-    <div className="App">
+    <AppContainer>
       <Header 
       />
       <main>
@@ -98,7 +101,7 @@ const App = () => {
           />
         </Routes>
       </main>
-    </div>
+    </AppContainer>
   );
 }
 export default App;

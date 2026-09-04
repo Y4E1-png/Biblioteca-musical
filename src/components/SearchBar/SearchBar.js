@@ -1,19 +1,24 @@
 import React from "react";
+import { SearchForm, SearchLabel, SearchInput, SearchButton } from "./styles";
 
 const SearchBar = (props) => {
     return (
-        <form onSubmit={props.buscarArtista}>
-            <label htmlFor="artista">Buscar artista:</label>
+        <SearchForm onSubmit={props.buscarArtista}>
+            <SearchLabel htmlFor="artista">
+                Buscar artista
+            </SearchLabel>
 
-            <input
+            <SearchInput
                 id="artista"
                 type="text"
                 value={props.artista}
                 onChange={(e) => props.setArtista(e.target.value)}
                 placeholder="Escribe un artista"
             />
-            <button type="submit">Buscar</button>
-        </form>
+            <SearchButton type="submit">
+                Buscar
+            </SearchButton>
+        </SearchForm>
     );
 };
 

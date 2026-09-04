@@ -1,12 +1,13 @@
 
 import React from "react";
 import Song from "../Song/Song";
-import './styles.css';
+import { LibraryContainer, LibraryTitle } from "./styles";
+
 
 const Library = (props) => {
     return (
-        <section className="biblioteca">
-            <h2>Mi biblioteca</h2>
+        <LibraryContainer>
+            <LibraryTitle>Mi biblioteca</LibraryTitle>
 
             {props.canciones.map((cancion) => (
                 <Song
@@ -17,7 +18,7 @@ const Library = (props) => {
                     duracion={cancion.duracion}
                 />
             ))}
-        </section>
+        </LibraryContainer>
     );
 }
 

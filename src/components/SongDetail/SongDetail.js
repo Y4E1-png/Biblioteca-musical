@@ -1,7 +1,9 @@
 import React from "react";
 import {useParams} from "react-router";
 import useFetch from "../../hooks/useFetch";
+import { SongDetailContainer, SongDetailTitle, RetryButton } from "./styles";
 import Song from "../Song/Song";
+import StatusMessage from "../StatusMessage/StatusMessage";
 
 const SongDetail = () => {
     const { id } = useParams();
@@ -13,22 +15,22 @@ const SongDetail = () => {
 
     const renderContent = () => {
         if (loading) {
-            return <p>Cargando canción...</p>;
+            return <StatusMessage>Cargando canción...</StatusMessage>;
         }
 
         if (error) {
             return (
                 <>
-                    <p>Hubo un problema al cargar la canción.</p>
-                    <button type="button" onClick={reintentar}>
+                    <StatusMessage error>Hubo un problema al cargar la canción.</StatusMessage>
+                    <RetryButton type="button" onClick={reintentar}>
                         Reintentar
-                    </button>
+                    </RetryButton>
                 </>
             );
         }
 
         if (!data.track || data.track.length === 0) {
-            return <p>No se encontraron detalles para esta canción.</p>;
+            return <StatusMessage>No se encontraron detalles para esta canción.</StatusMessage>;
         }
 
         const cancion = data.track[0];
@@ -52,10 +54,10 @@ const SongDetail = () => {
     };
 
     return (
-        <section>
-            <h2>Detalles de la canción</h2>
+        <SongDetailContainer>
+            <SongDetailTitle>Detalles de la canción</SongDetailTitle>
             {renderContent()}
-        </section>
+        </SongDetailContainer>
     );
 };
 

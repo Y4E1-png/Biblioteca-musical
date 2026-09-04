@@ -1,11 +1,12 @@
 import React from 'react';
-import './styles.css';
+import {HeaderContainer, Title} from './styles';
+
 
 const Header = () => {
     return (
-        <header className="header">
-            <h1>Biblioteca Musical</h1>
-        </header>
-    )
+        <HeaderContainer>
+            <Title>Biblioteca Musical</Title>
+        </HeaderContainer>
+    );
 }
 export default Header;
