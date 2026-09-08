@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import {Routes, Route} from 'react-router';
 import Header from './components/Header/Header';
 import SearchResults from './components/SearchResults/SearchResults';
@@ -13,23 +13,13 @@ import { AppContainer } from './App.styles';
 const App = () => {
 
   const [url, setUrl] = useState(
-    'https://www.theaudiodb.com/api/v1/json/123/searchalbum.php?s=Oasis'
+    'https://www.theaudiodb.com/api/v1/json/123/searchalbum.php?s=Coldplay'
   );
 
   const { data, loading, error, reintentar } = useFetch(url);
   
   const [artista, setArtista] = useState('');
   
-  const [biblioteca, setBiblioteca] = useState([]);
-
-  useEffect(() => {
-      console.log("La biblioteca se ha actualizado.");
-  },[biblioteca]);
-
-  const agregarCancion = (cancion) => {
-    setBiblioteca([...biblioteca, cancion]);
-  }
-
   const buscarArtista = (e) => {
     e.preventDefault();
 
@@ -66,7 +56,6 @@ const App = () => {
       <SearchResults
         key={album.idAlbum}
         idAlbum={album.idAlbum}
-        agregarCancion={agregarCancion}
       />
     ));
   };
@@ -87,9 +76,7 @@ const App = () => {
                   buscarArtista={buscarArtista}
                 />
                 {renderContent()}
-                <Library 
-                  canciones={biblioteca} 
-                />
+                <Library />
               </>
             }
           />

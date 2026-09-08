@@ -2,11 +2,15 @@
 import React from "react";
 import Song from "../Song/Song";
 import useFetch from "../../hooks/useFetch";
-import {Link} from "react-router";
-import { ResultsContainer, ResultsTitle, ActionButton } from "./styles";
+import { ResultsContainer, ResultsTitle, ActionButton, Enlace } from "./styles";
 import StatusMessage from "../StatusMessage/StatusMessage";
+import { useDispatch } from "react-redux";
+import { addSong } from "../../redux/libraryActions";
 
 const SearchResults = (props) => {
+
+    const dispatch = useDispatch();
+
     const { data, loading, error, reintentar } = useFetch(
         `https://www.theaudiodb.com/api/v1/json/123/track.php?m=${props.idAlbum}`
     ); 
@@ -55,10 +59,10 @@ const SearchResults = (props) => {
                         album={cancion.album}
                         duracion={cancion.duracion}
                     />
-                    <Link to={`/song/${cancion.id}`}>
-                    Ver detalles
-                    </Link>
-                    <ActionButton onClick ={() => props.agregarCancion(cancion)}>
+                    <Enlace to={`/song/${cancion.id}`}>
+                        Ver detalles
+                    </Enlace>
+                    <ActionButton onClick ={() => dispatch(addSong(cancion))}>
                         Agregar a mi biblioteca
                     </ActionButton>
                 </div>

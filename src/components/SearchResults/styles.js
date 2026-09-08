@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { Link } from 'react-router';
 
 
 export const ResultsContainer = styled.section`
@@ -9,6 +10,19 @@ export const ResultsContainer = styled.section`
 
 export const ResultsTitle = styled.h2`
   margin-top: 0;
+`;
+
+export const Enlace = styled(Link)`
+  display: inline-block;
+  margin-right: 12px;
+  color: ${props => props.theme.colors.primary};
+  font-weight: bold;
+  text-decoration: none;
+
+  &:hover {
+    color: ${props => props.theme.colors.primaryHover};
+    text-decoration: underline;
+  }
 `;
 
 export const ActionButton = styled.button`
