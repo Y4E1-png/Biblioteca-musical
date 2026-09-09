@@ -45,6 +45,7 @@ const SongDetail = () => {
 
         return (
             <Song
+                imagen={cancion.strTrackThumb}
                 titulo={cancion.strTrack}
                 artista={cancion.strArtist}
                 album={cancion.strAlbum}

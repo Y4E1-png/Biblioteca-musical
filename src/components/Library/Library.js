@@ -3,12 +3,12 @@ import React from "react";
 import Song from "../Song/Song";
 import { LibraryContainer, LibraryTitle } from "./styles";
 import { useSelector, useDispatch } from "react-redux";
-import { removeSong } from "../../redux/libraryActions";
+import { removeSong } from "../../redux/slices/librarySlice";
 
 
 const Library = () => {
 
-    const canciones = useSelector((state) => state);
+    const canciones = useSelector((state) => state.library);
     const dispatch = useDispatch();
 
     return (
@@ -18,6 +18,7 @@ const Library = () => {
             {canciones.map((cancion) => (
                 <div key={cancion.id}>
                     <Song
+                        imagen={cancion.imagen}
                         titulo={cancion.titulo}
                         artista={cancion.artista}
                         album={cancion.album}
