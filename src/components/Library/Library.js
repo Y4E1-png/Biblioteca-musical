@@ -4,6 +4,7 @@ import Song from "../Song/Song";
 import { LibraryContainer, LibraryTitle } from "./styles";
 import { useSelector, useDispatch } from "react-redux";
 import { removeSong } from "../../redux/slices/librarySlice";
+import StatusMessage from "../StatusMessage/StatusMessage";
 
 
 const Library = () => {
@@ -14,6 +15,12 @@ const Library = () => {
     return (
         <LibraryContainer>
             <LibraryTitle>Mi biblioteca</LibraryTitle>
+            
+            {canciones.length === 0 && (
+                <StatusMessage>
+                    No hay canciones en tu biblioteca
+                </StatusMessage>
+            )}
 
             {canciones.map((cancion) => (
                 <div key={cancion.id}>
