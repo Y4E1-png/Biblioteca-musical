@@ -6,6 +6,8 @@ UR TUNES is a music discovery and personal library application built with React.
 
 This project was developed as part of the EBAC Front-End Developer program. The application interface is in Spanish.
 
+[Live demo](https://urtunes.web.app)
+
 ## Features
 
 - Search for songs by artist using TheAudioDB.
