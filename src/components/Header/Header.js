@@ -1,12 +1,18 @@
-import React from 'react';
-import {HeaderContainer, Title} from './styles';
 
+import estrella from '../../assets/logoBM.png';
+import { HeaderContainer, Brand, BrandLogo, Title } from './styles';
 
-const Header = () => {
-    return (
-        <HeaderContainer>
-            <Title>Biblioteca Musical</Title>
-        </HeaderContainer>
-    );
-}
+const Header = (props) => {
+  return (
+    <HeaderContainer>
+      <Brand>
+        <BrandLogo src={estrella} alt="" />
+        <Title>UR TUNES</Title>
+      </Brand>
+
+      {props.children}
+    </HeaderContainer>
+  );
+};
+
 export default Header;

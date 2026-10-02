@@ -1,4 +1,3 @@
-
 import { render, screen } from "@testing-library/react";
 import { ThemeProvider } from "styled-components";
 import Header from "../components/Header/Header";
@@ -13,21 +12,21 @@ describe("Header", () => {
         );
 
         expect(
-            screen.getByRole("heading", {
-                name: "Biblioteca Musical"
-            })
+            screen.getByRole("heading", { name: "UR TUNES", level: 1 })
         ).toBeInTheDocument();
     });
 
-    test("solo muestra el título dentro del encabezado", () => {
-        const { container } = render(
+    test("muestra el contenido recibido dentro del encabezado", () => {
+        render(
             <ThemeProvider theme={theme}>
-                <Header />
+                <Header>
+                    <button type="button">Buscar artista</button>
+                </Header>
             </ThemeProvider>
         );
 
-        const encabezado = container.querySelector("header");
-
-        expect(encabezado.children).toHaveLength(1);
+        expect(
+            screen.getByRole("button", { name: "Buscar artista" })
+        ).toBeInTheDocument();
     });
 });

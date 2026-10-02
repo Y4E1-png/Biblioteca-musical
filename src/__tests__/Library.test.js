@@ -1,4 +1,3 @@
-
 import { render, screen, fireEvent } from "@testing-library/react";
 import { ThemeProvider } from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
@@ -50,35 +49,25 @@ describe("Library", () => {
     test("muestra las canciones guardadas en la biblioteca", () => {
         renderizarLibrary();
 
-        expect(
-            screen.getByText("Gimme More")
-        ).toBeInTheDocument();
-
-        expect(
-            screen.getByText("Artista: Britney Spears")
-        ).toBeInTheDocument();
-
-        expect(
-            screen.getByText("Álbum: Blackout")
-        ).toBeInTheDocument();
-
-        expect(
-            screen.getByText("Cry Me A River")
-        ).toBeInTheDocument();
+        expect(screen.getByText("Gimme More")).toBeInTheDocument();
+        expect(screen.getByText("Britney Spears")).toBeInTheDocument();
+        expect(screen.getByText("Blackout · 5:55")).toBeInTheDocument();
+        expect(screen.getByText("Cry Me A River")).toBeInTheDocument();
+        expect(screen.getByText("Justin Timberlake")).toBeInTheDocument();
+        expect(screen.getByText("Justified · 3:03")).toBeInTheDocument();
+        expect(screen.getByRole("img", { name: "Portada de Blackout" }))
+            .toHaveAttribute("src", "portada-blackout.jpg");
     });
 
-    test("elimina una canción al hacer clic en su botón", () => {
+    test("elimina la canción seleccionada al pulsar su botón de cierre", () => {
         renderizarLibrary();
 
-        const botonesEliminar = screen.getAllByRole("button", {
-            name: "Eliminar"
-        });
+        fireEvent.click(screen.getByRole("button", {
+            name: "Eliminar Cry Me A River de mi biblioteca"
+        }));
 
-        fireEvent.click(botonesEliminar[0]);
-
-        expect(dispatchSimulado).toHaveBeenCalledWith(
-            removeSong("1")
-        );
+        expect(dispatchSimulado).toHaveBeenCalledTimes(1);
+        expect(dispatchSimulado).toHaveBeenCalledWith(removeSong("2"));
     });
 
     test("muestra un mensaje cuando la biblioteca está vacía", () => {
@@ -86,8 +75,10 @@ describe("Library", () => {
 
         renderizarLibrary();
 
-        expect(
-            screen.getByText("No hay canciones en tu biblioteca")
-        ).toBeInTheDocument();
+        expect(screen.getByRole("heading", {
+            name: "Aún no has guardado canciones"
+        })).toBeInTheDocument();
+        expect(screen.queryByRole("button", { name: /Eliminar/ }))
+            .not.toBeInTheDocument();
     });
 });

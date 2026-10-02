@@ -1,4 +1,3 @@
-
 import { render, screen, fireEvent } from "@testing-library/react";
 import { ThemeProvider } from "styled-components";
 import axios from "axios";
@@ -7,11 +6,15 @@ import theme from "../styles/theme";
 
 jest.mock("axios");
 
-jest.mock("react-router", () => ({
-    useParams: () => ({
-        id: "1"
-    })
-}));
+jest.mock("react-router", () => {
+    const React = jest.requireActual("react");
+
+    return {
+        useParams: () => ({ id: "1" }),
+        Link: ({ children, to, ...props }) =>
+            React.createElement("a", { ...props, href: to }, children)
+    };
+});
 
 const detalleCancion = {
     idTrack: "1",
@@ -33,6 +36,7 @@ const renderizarSongDetail = () => {
 describe("SongDetail", () => {
     beforeEach(() => {
         jest.clearAllMocks();
+        axios.get.mockReset();
     });
 
     test("muestra un mensaje mientras carga la canción", () => {
@@ -40,80 +44,47 @@ describe("SongDetail", () => {
 
         renderizarSongDetail();
 
-        expect(
-            screen.getByText("Cargando canción...")
-        ).toBeInTheDocument();
+        expect(screen.getByText("Cargando canción...")).toBeInTheDocument();
     });
 
-    test("muestra los detalles de la canción", async () => {
-        axios.get.mockResolvedValue({
-            data: {
-                track: [detalleCancion]
-            }
-        });
+    test("muestra los detalles y el enlace para volver a la biblioteca", async () => {
+        axios.get.mockResolvedValue({ data: { track: [detalleCancion] } });
 
         renderizarSongDetail();
 
-        expect(
-            await screen.findByText("Gimme More")
-        ).toBeInTheDocument();
-
-        expect(
-            screen.getByText("Artista: Britney Spears")
-        ).toBeInTheDocument();
-
-        expect(
-            screen.getByText("Álbum: Blackout")
-        ).toBeInTheDocument();
-
-        expect(
-            screen.getByText("Duración: 5:55")
-        ).toBeInTheDocument();
+        expect(await screen.findByText("Gimme More")).toBeInTheDocument();
+        expect(screen.getByText("Artista: Britney Spears")).toBeInTheDocument();
+        expect(screen.getByText("Álbum: Blackout")).toBeInTheDocument();
+        expect(screen.getByText("Duración: 5:55")).toBeInTheDocument();
+        expect(screen.getByRole("link", { name: "Volver a la biblioteca" }))
+            .toHaveAttribute("href", "/");
+        expect(axios.get).toHaveBeenCalledWith(
+            "https://www.theaudiodb.com/api/v1/json/123/track.php?h=1"
+        );
     });
 
     test("muestra un mensaje cuando no existen detalles", async () => {
-        axios.get.mockResolvedValue({
-            data: {
-                track: []
-            }
-        });
+        axios.get.mockResolvedValue({ data: { track: [] } });
 
         renderizarSongDetail();
 
-        expect(
-            await screen.findByText(
-                "No se encontraron detalles para esta canción."
-            )
-        ).toBeInTheDocument();
+        expect(await screen.findByText("No se encontraron detalles para esta canción."))
+            .toBeInTheDocument();
     });
 
     test("permite reintentar después de un error", async () => {
         axios.get
             .mockRejectedValueOnce(new Error("Error de conexión"))
-            .mockResolvedValueOnce({
-                data: {
-                    track: [detalleCancion]
-                }
-            });
+            .mockResolvedValueOnce({ data: { track: [detalleCancion] } });
 
         renderizarSongDetail();
 
-        expect(
-            await screen.findByText(
-                "Hubo un problema al cargar la canción."
-            )
-        ).toBeInTheDocument();
+        expect(await screen.findByText("Hubo un problema al cargar la canción."))
+            .toBeInTheDocument();
 
-        fireEvent.click(
-            screen.getByRole("button", {
-                name: "Reintentar"
-            })
-        );
+        fireEvent.click(screen.getByRole("button", { name: "Reintentar" }));
 
-        expect(
-            await screen.findByText("Gimme More")
-        ).toBeInTheDocument();
-
+        expect(await screen.findByText("Gimme More")).toBeInTheDocument();
         expect(axios.get).toHaveBeenCalledTimes(2);
     });
 });

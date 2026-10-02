@@ -1,76 +1,102 @@
 
-import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import Song from "../Song/Song";
-import { ResultsContainer, ResultsTitle, ActionButton, Enlace } from "./styles";
+import SearchResultsCard from '../SearchResultsCard/SearchResultsCard';
+import { ResultsContainer, ActionButton, EmptyState, EmptyIcon, EmptyTitle, EmptyDescription, NoResultsIcon } from "./styles";
 import StatusMessage from "../StatusMessage/StatusMessage";
 import { addSong } from "../../redux/slices/librarySlice";
 import { fetchSongs } from "../../redux/slices/searchSlice";
 
 const SearchResults = (props) => {
 
-    const dispatch = useDispatch();
+  const dispatch = useDispatch();
 
-    const { results, loading, error } = useSelector(
-        (state) => state.search
-    );
+  const { results, loading, error, hasSearched } = useSelector(
+    (state) => state.search
+  );
 
-    const reintentar = () => {
-        const artista = props.artista.trim();
+  const reintentar = () => {
+    const artista = props.artista.trim();
 
-        if (artista) {
-            dispatch(fetchSongs(artista));
-        }
-    };
+    if (artista) {
+      dispatch(fetchSongs(artista));
+    }
+  };
 
-    const renderContent = () => {
-        if (loading) {
-            return <StatusMessage>Cargando canciones...</StatusMessage>;
-        }
+  const renderContent = () => {
+    if (loading) {
+      return <StatusMessage>Cargando canciones...</StatusMessage>;
+    }
 
-        if (error) {
-            return (
-                <>
-                    <StatusMessage error>{error}</StatusMessage>
-                    <ActionButton type="button" onClick={reintentar}>
-                        Reintentar
-                    </ActionButton>
-                </>
-            );
-        }
+    if (error) {
+      return (
+        <>
+          <StatusMessage error>{error}</StatusMessage>
+          <ActionButton type="button" onClick={reintentar}>
+            Reintentar
+          </ActionButton>
+        </>
+      );
+    }
 
-        if (results.length === 0) {
-            return null;
-        }
+    if (!hasSearched) {
+      return (
+        <EmptyState>
+          <EmptyIcon aria-hidden="true">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
+              <circle cx="10" cy="10" r="6" />
+              <path d="M14.5 14.5L20 20" />
+            </svg>
+          </EmptyIcon>
 
-        return results.map((cancion) => (
+          <EmptyTitle>
+            Encuentra tu próxima canción
+          </EmptyTitle>
 
-            <div key={cancion.id}>
-                <Song
-                    imagen={cancion.imagen}
-                    titulo={cancion.titulo}
-                    artista={cancion.artista}
-                    album={cancion.album}
-                    duracion={cancion.duracion}
-                />
+          <EmptyDescription>
+            Busca un artista en la barra superior, descubre sus canciones
+            y guarda tus favoritas en tu biblioteca.
+          </EmptyDescription>
+        </EmptyState>
+      );
+    }
 
-                <Enlace to={`/song/${cancion.id}`}>
-                    Ver detalles
-                </Enlace>
+    if (results.length === 0) {
+      return (
+        <EmptyState>
+          <NoResultsIcon aria-hidden="true">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" >
+              <circle cx="10" cy="10" r="6" />
+              <path d="M14.5 14.5L20 20" />
+              <path d="M8 8L12 12M12 8L8 12" />
+            </svg>
+          </NoResultsIcon>
 
-                <ActionButton onClick ={() => dispatch(addSong(cancion))}>
-                    Agregar a mi biblioteca
-                </ActionButton>
-            </div>
-        ));
-    };
+          <EmptyTitle>
+            No encontramos canciones
+          </EmptyTitle>
 
-    return (
-        <ResultsContainer>
-            <ResultsTitle>Resultados de la búsqueda</ResultsTitle>
-            {renderContent()}
-        </ResultsContainer>
-    );
+          <EmptyDescription>
+            Revisa el nombre del artista o prueba con otro para
+            descubrir nuevas canciones.
+          </EmptyDescription>
+        </EmptyState>
+      );
+    }
+
+    return results.map((searchResult) => (
+      <SearchResultsCard
+        key={searchResult.id}
+        searchResult={searchResult}
+        onAddSong={() => dispatch(addSong(searchResult))}
+      />
+    ));
+  }
+
+  return (
+    <ResultsContainer>
+      {renderContent()}
+    </ResultsContainer>
+  );
 };
 
 export default SearchResults;

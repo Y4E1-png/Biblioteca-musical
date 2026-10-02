@@ -14,30 +14,34 @@ const App = () => {
   
   return (
     <AppContainer>
-      <Header />
       <main>
         <Routes>
           <Route
             path="/"
             element={
               <>
-                <SearchBar
-                  artista={artista}
-                  setArtista={setArtista}
-                />
-                
-                <SearchResults
-                  artista={artista}
-                />
-                
+                <Header>
+                  <SearchBar
+                    artista={artista}
+                    setArtista={setArtista}
+                  />
+                </Header>
+
+                <SearchResults artista={artista} />
+
                 <Library />
               </>
             }
           />
+          
           <Route
             path="/song/:id"
             element={
-              <SongDetail />
+              <>
+                <Header />
+
+                <SongDetail />
+              </>
             }
           />
         </Routes>

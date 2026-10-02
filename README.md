@@ -1,138 +1,102 @@
-English | [Leer en español](README.es.md)
+# UR TUNES
 
-# Music Library
+**English** | [Español](README.es.md)
 
-A React application for searching songs by artist, viewing song details, and building a personal music library.
+UR TUNES is a music discovery and personal library application built with React. Search for an artist, explore their songs, view track details, and save your favorites in a library that stays available after a page reload.
 
-Developed as part of the Front-End Development program at EBAC to practice API integration, reusable components, routing, and application state management.
-
-Music information is retrieved from TheAudioDB API.
+This project was developed as part of the EBAC Front-End Developer program. The application interface is in Spanish.
 
 ## Features
 
-- Search for songs by artist name.
-- View song titles, artists, albums, artwork, and duration when available.
-- Open a dedicated page with song details.
-- Add songs to a personal library.
-- Prevent duplicate songs from being added.
-- Remove songs from the library.
-- Display loading messages and error messages with a retry option.
+- Search for songs by artist using TheAudioDB.
+- Browse results with album artwork, song titles, artists, albums, and track durations.
+- Open a dedicated song detail page and return to the main view.
+- Add songs to a personal library, prevent duplicate entries, and remove saved songs.
+- Restore the library from browser `localStorage` when the application loads.
+- Display loading, empty, and error states, with retry actions for failed requests.
+- Use a responsive dark interface with warm accents and distinct layouts for search results and saved songs.
+- Navigate controls with accessible labels and visible keyboard focus indicators.
 
-The personal library is stored in memory and resets when the page is refreshed.
+## Tech Stack
 
-## Technologies
+| Area | Tools |
+| --- | --- |
+| User interface | React, styled-components |
+| State management | Redux Toolkit, React Redux |
+| Routing | React Router |
+| HTTP requests | Axios |
+| Testing | Jest, React Testing Library |
+| Development and build | Create React App / react-scripts |
 
-- **HTML, CSS, and JavaScript:** page structure, styling, and application logic.
-- **React and React DOM:** reusable components and rendering the interface.
-- **Redux Toolkit and React Redux:** managing search results, loading states, errors, and the personal library.
-- **React Router:** navigation between the home page and song detail pages.
-- **styled-components:** component styles, global styles, and theming.
-- **Axios:** HTTP requests to TheAudioDB API.
-- **Create React App:** development server and production builds through react-scripts.
-- **Jest:** automated tests.
-- **React Testing Library:** testing components and user interactions.
-- **npm:** dependency management and project commands.
+## Getting Started
 
-## Getting started
-
-### Requirements
-
-- Node.js and npm installed.
-- Git installed to clone the repository.
-- An internet connection to install dependencies and retrieve music information from TheAudioDB.
-
-### Installation
-
-1. Clone the repository and open its folder:
+You need Node.js and npm installed on your computer.
 
 ```bash
 git clone https://github.com/Y4E1-png/Biblioteca-musical.git
 cd Biblioteca-musical
-```
-
-2. Install the dependencies:
-
-```bash
-npm install
-```
-
-3. Start the development server:
-
-```bash
+npm ci
 npm start
 ```
 
-Open the local address displayed in the terminal.
+Open [http://localhost:3000](http://localhost:3000) in your browser. An internet connection is needed to retrieve music data and artwork.
 
-## Available commands
+## Usage
 
-| Command | Description |
-|---|---|
-| `npm start` | Starts the development server. |
-| `npm test` | Runs the automated tests. |
-| `npm run build` | Generates the production version in the `build` folder. |
+1. Enter an artist's name in the search field and select the search icon.
+2. Browse the returned songs and select **Agregar a mi biblioteca** to save a song.
+3. Select the three-dot button on a search result to open its detail page.
+4. Use the back arrow to return to the main view.
+5. Remove a saved song using the **×** button on its library card.
 
-## Usage example
+The saved library is stored under the `biblioteca-musical` key in `localStorage`. It belongs to the current browser and site address. Search results are kept in memory, while saved songs persist between visits.
 
-The application interface is in Spanish.
+Music metadata and artwork come from [TheAudioDB](https://www.theaudiodb.com/). Available information depends on the API response.
 
-1. Enter an artist's name, such as `Coldplay`, in the search field.
-2. Click **Buscar** and wait for the results.
-3. Browse the songs and their available information.
-4. Click **Agregar a mi biblioteca** to add a song to your collection.
-5. Find the selected song in the **Mi biblioteca** section.
-6. Click **Eliminar** to remove a song from the library.
-7. Click **Ver detalles** on a search result to open its song detail page.
+## Testing
 
-Use your browser's Back button to return from a song detail page.
-
-If a request fails, click **Reintentar** to try again. Available songs, images, and metadata depend on the information returned by TheAudioDB.
-
-## API integration
-
-The application uses TheAudioDB to retrieve music information through Axios.
-
-Artist searches first retrieve the artist's albums and then the tracks associated with those albums. Song detail pages request information using the selected song's ID.
-
-Search results, loading states, and errors are managed with Redux Toolkit. Song detail pages use a custom `useFetch` hook to manage their requests.
-
-## Tests
-
-The project includes automated tests using Jest and React Testing Library.
-
-The tests cover:
-
-- Rendering the application and its main components.
-- Entering an artist's name and submitting a search.
-- Displaying search results.
-- Adding songs to the personal library.
-- Removing songs and displaying an empty library message.
-- Displaying song details, loading messages, and missing details.
-- Retrying a song detail request after an error.
-
-To run the tests:
+Run the test suite in watch mode:
 
 ```bash
 npm test
 ```
 
-## Project structure
+Run it once without watch mode:
 
-```text
-src/
-├── __tests__/    Automated tests
-├── components/   Interface components and their styles
-├── hooks/        Custom hooks for data fetching
-├── redux/        Redux store and slices
-├── styles/       Global styles and theme
-├── App.js        Application layout and routes
-├── index.js      Application entry point
-└── setupTests.js Testing configuration
+```bash
+npm test -- --watchAll=false --runInBand
 ```
 
+The application tests cover the header, search form, result states, library actions, duplicate prevention, and song detail loading and retry behavior.
+
+## Production Build
+
+```bash
+npm run build
+```
+
+The production files are generated in the `build/` directory.
+
+When deploying, configure the host to serve `index.html` for client-side routes such as `/song/:id`. This allows detail pages to work when opened directly or refreshed. The current build configuration assumes the application is hosted at the root of a domain.
+
+## Project Structure
+
+```text
+public/             HTML template, favicon, and web app manifest
+src/
+  assets/           Brand assets
+  components/       Header, search, library, and song detail components
+  hooks/            Reusable data-fetching hook
+  redux/            Store, search state, and library state
+  styles/           Global styles and theme
+  __tests__/        Component and integration tests
+  App.js            Main application routes
+  index.js          Application entry point and providers
+```
 
 ## Author
 
-Developed by **Yael Aguilar** as part of the Front-End Development program at EBAC.
+**Yael Aguilar**
 
-[GitHub profile](https://github.com/Y4E1-png)
+- [GitHub](https://github.com/Y4E1-png)
+- [LinkedIn](https://www.linkedin.com/in/dyael-aguilar)
